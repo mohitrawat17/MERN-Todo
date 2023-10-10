@@ -1,18 +1,41 @@
 import React from 'react'
-import Header from './Header'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import Layout from './Layout'
+import HomePage from './HomePage'
+import Register from './Register'
+import Login from './Login'
 import Body from './Body'
-import Footer from './Footer'
 
 const App = () => {
-    const dark={
-        backgroundColor: 'bg-black',
-        textColor:"text-orange-200"
+
+  const appRouter=createBrowserRouter([
+    {
+      path: '/',
+      element:<Layout/>,
+      children:[
+        {
+          path:'/',
+          element:<HomePage/>
+        },
+        {
+          path:'/register',
+          element:<Register/>
+        },
+        {
+          path:'/login',
+          element:<Login/>
+        },
+        {
+          path:"/home",
+          element:<Body/>
+        }
+      ]
     }
+  ])
+    
   return (
-    <div className={`min-h-screen ${dark.backgroundColor} ${dark.textColor} p-5`}>
-      <Header/>
-      <Body/>
-      <Footer/>
+    <div >
+     <RouterProvider router={appRouter}/>
     </div>
   )
 }
