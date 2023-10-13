@@ -1,26 +1,41 @@
 const todo = require("../models/todo.model");
+const jwt=require('jsonwebtoken')
 
 module.exports = {
   getAllTodos: async (req, res) => {
+    
     try {
-      const data = await todo.find({}, { __v: 0});
+      const token =  req.headers['x-access-token']
+      const decoded=jwt.verify(token,'secretmohitxrwt123')
+
+      const data = await todo.find({user:decoded._id}, { __v: 0});
+      
       res.send(data);
+
+      console.log(decoded);
     } catch (error) {
       console.log(error.message);
+      res.status(500).json({error:'Internal server error'})
     }
   },
 
   setTodos: async (req, res) => {
-    //inserting data in database
-    const p1 = new todo({
-      name: req.body.name,
-      task: req.body.task,
-      taskCompleted: req.body.taskCompleted,
-    });
-
-    //saving data in database using async await..
-    const result = await p1.save();
-    res.send(result);
+    try {
+      const token = req.headers['x-access-token'];
+      const decoded = jwt.verify(token, 'secretmohitxrwt123'); // Use environment variable for secret key
+      const p1 = new todo({
+        name: req.body.name,
+        task: req.body.task,
+        taskCompleted: req.body.taskCompleted,
+        user: decoded._id
+      });
+      const result = await p1.save();
+      res.send(result);
+      console.log(decoded._id);
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
   },
 
 
@@ -28,6 +43,7 @@ module.exports = {
     try {
       const data=await todo.deleteOne({_id:req.params.id});
       res.send(data);
+      
     } catch (error) {
       res.send(error)
     }
@@ -37,8 +53,9 @@ module.exports = {
   updateStatus:async(req,res)=>{
       try {
         const data=await todo.updateOne({_id:req.params.id},{$set:{taskCompleted:req.body.taskCompleted}})
+        res.send({message:"Task updated"})
       } catch (error) {
-        res.send(error)
+        res.status(500).json({ error: 'Internal Server Error' });
       }
   }
 };

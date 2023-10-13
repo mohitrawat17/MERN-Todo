@@ -16,7 +16,12 @@ const Body = () => {
 
 
   useEffect(() => {
-    Axios.get("http://localhost:3000/data").then((res) => {
+    Axios.get("http://localhost:3000/data",{
+      headers:{
+        "x-access-token":localStorage.getItem('Token')
+      }
+    }).then((res) => {
+      // console.log("Data received:", res.data);
       setAllTasks(res.data);
       setTodoLength(res.data.length)
 
@@ -32,7 +37,7 @@ const Body = () => {
     })
 
 
-  }, [allTasks])
+  }, [])
 
   const handleAdd=()=>{
     if (newTitle && newTask) {
@@ -44,6 +49,10 @@ const Body = () => {
   }
 
 
+  const headers={
+    "x-access-token": localStorage.getItem('Token')
+  }
+
  
 
   const createTodo=()=>{
@@ -51,7 +60,11 @@ const Body = () => {
       name:newTitle,
       task:newTask,
       taskCompleted:false
-    }).then((res)=>{
+    },
+    {
+      headers:headers
+    }
+    ).then((res)=>{
       alert('New item added in Todo list')
       setAllTasks([...allTasks,{
         name:newTitle,

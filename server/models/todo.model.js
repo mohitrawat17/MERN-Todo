@@ -12,6 +12,10 @@ const todoSchema = new mongoose.Schema({
   taskCompleted: {
     type: Boolean,
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'UserModel'  // This refers to the UserModel collection
+  }
 });
 
 const todoModel = new mongoose.model("todoModel", todoSchema);

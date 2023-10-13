@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 require('dotenv').config();
-
+const { newUser, userLogin } = require("./controllers/usersController");
 const todoController = require("./controllers/todoList");
 
 const app = express();
@@ -17,6 +17,11 @@ mongoose
   .then(() => {
     console.log("connected");
   });
+
+
+
+  app.post('/register',newUser)
+  app.post('/login',userLogin)
 
 
 
