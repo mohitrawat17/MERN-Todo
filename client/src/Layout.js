@@ -12,10 +12,10 @@ const Layout = () => {
 
 
   return (
-    <div className={`min-h-screen ${dark.backgroundColor} ${dark.textColor} p-5`}>
+    <div className={`min-h-screen ${dark.backgroundColor} ${dark.textColor} pt-5`}>
       <Header/>
       <Outlet/>
-      {/* <Footer/> */}
+      <Footer/>
     </div>
   )
 }

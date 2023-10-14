@@ -10,7 +10,7 @@ module.exports = {
 
       const data = await todo.find({user:decoded._id}, { __v: 0});
       
-      res.send(data);
+      res.json({data,username:decoded.username});
 
       console.log(decoded);
     } catch (error) {

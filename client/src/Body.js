@@ -1,113 +1,122 @@
+import React, { useEffect, useState } from "react";
+import Axios from "axios";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import CancelSharpIcon from '@mui/icons-material/CancelSharp';
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckCircleOutlineSharpIcon from '@mui/icons-material/CheckCircleOutlineSharp';
-import { useEffect, useState } from "react";
-import Axios from 'axios'
-
 
 const Body = () => {
   const [newTask, setNewTask] = useState("");
   const [newTitle, setNewTitle] = useState("");
   const [addTodo, setAddTodo] = useState(false);
   const [allTasks, setAllTasks] = useState([]);
-  const[todoLength,setTodoLength]=useState(0)
-  const[todoCompleted,setTodoCompleted]=useState(0)
+  const [todoLength, setTodoLength] = useState(0);
+  const [todoCompleted, setTodoCompleted] = useState(0);
+  const[username,setUsername]=useState('')
+  console.log(allTasks);
 
+  const fetchData = async () => {
+    try {
+      const response = await Axios.get("http://localhost:3000/data", {
+        headers: {
+          "x-access-token": localStorage.getItem('Token')
+        }
+      });
+      setAllTasks(response?.data?.data);
+      setUsername(response.data?.username)
+
+     
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
   useEffect(() => {
-    Axios.get("http://localhost:3000/data",{
-      headers:{
-        "x-access-token":localStorage.getItem('Token')
+    fetchData();
+    return () => {
+      // Clean up the state when the component unmounts
+      setAllTasks([]);
+      setTodoLength(0);
+      setTodoCompleted(0);
+    };
+  }, []); // Empty dependency array ensures useEffect runs once after initial render
+
+
+  useEffect(()=>{
+    setTodoLength(allTasks.length);
+    const completedTasksCount = allTasks.reduce((count, task) => {
+      if (task.taskCompleted) {
+        return count + 1;
       }
-    }).then((res) => {
-      // console.log("Data received:", res.data);
-      setAllTasks(res.data);
-      setTodoLength(res.data.length)
+      return count;
+    }, 0);
+   
+    setTodoCompleted(completedTasksCount);
+  },[allTasks])
 
-
-      const completedTasksCount = res.data.reduce((count, task) => {
-        if (task.taskCompleted) {
-          return count + 1;
-        }
-        return count;
-      }, 0);
-    
-      setTodoCompleted(completedTasksCount);
-    })
-
-
-  }, [])
-
-  const handleAdd=()=>{
+  const handleAdd = () => {
     if (newTitle && newTask) {
       setAddTodo(false);
       createTodo();
       setNewTitle("");
-      setNewTask("")
+      setNewTask("");
     }
-  }
-
-
-  const headers={
-    "x-access-token": localStorage.getItem('Token')
-  }
-
- 
-
-  const createTodo=()=>{
-    Axios.post('http://localhost:3000/data',{
-      name:newTitle,
-      task:newTask,
-      taskCompleted:false
-    },
-    {
-      headers:headers
-    }
-    ).then((res)=>{
-      alert('New item added in Todo list')
-      setAllTasks([...allTasks,{
-        name:newTitle,
-        task:newTask,
-        taskCompleted:false
-      }])
-    })
-  }
-
-  const deleteTodos=(id)=>{
-    Axios.delete(`http://localhost:3000/data/${id}`).then((response)=>{
-    alert(`Item deleted`)
-    setAllTasks(allTasks.filter((data)=>{
-      return data._id!==id;
-    }))
-  }
-    )
-  }
-
-  const handleStatus = (id, status) => {
-    Axios.patch(`http://localhost:3000/data/${id}`, {
-      taskCompleted: status
-    })
   };
-  
 
-  const handleText=()=>{
-    if(todoLength===0){
-      return "Let's start"
+  const createTodo = async () => {
+    try {
+      const response = await Axios.post('http://localhost:3000/data', {
+        name: newTitle,
+        task: newTask,
+        taskCompleted: false
+      }, {
+        headers: {
+          "x-access-token": localStorage.getItem('Token')
+        }
+      });
+      alert('New item added in Todo list');
+      setAllTasks([...allTasks, response.data]);
+    } catch (error) {
+      console.error('Error creating todo:', error);
     }
-    else if(todoLength!==todoCompleted){
-      return 'pending...'
+  };
+
+  const deleteTodos = async (id) => {
+    try {
+      await Axios.delete(`http://localhost:3000/data/${id}`);
+      alert(`Item deleted`);
+      setAllTasks(allTasks.filter((data) => data._id !== id));
+    } catch (error) {
+      console.error('Error deleting todo:', error);
     }
-    else{
-      return 'Completed'
+  };
+
+  const handleStatus = async (id, status) => {
+    try {
+      await Axios.patch(`http://localhost:3000/data/${id}`, {
+        taskCompleted: status
+      });
+      fetchData(); // Fetch updated data after status change
+    } catch (error) {
+      console.error('Error updating status:', error);
     }
-  }
-  
+  };
+
+  const handleText = () => {
+    if (todoLength === 0) {
+      return "Let's start";
+    } else if (todoLength !== todoCompleted) {
+      return 'pending...';
+    } else {
+      return 'Completed';
+    }
+  };
 
 
 
   return (
-    <div className="flex justify-center items-start flex-col my-10">
+    <div className="flex justify-center items-end flex-col my-10">
+    <div className="text-lg font-semibold mr-5">Welcome<span className="text-orange-600"> {username}</span></div>
       <div className="rounded-3xl border flex justify-between mx-auto py-16 px-10 w-3/6  border-orange-200">
         <div className="text-5xl">
           Todo<br/><span className="text-4xl"> {handleText()}</span>
