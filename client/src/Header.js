@@ -13,13 +13,13 @@ const Header = () => {
   };
 
   return (
-    <div className='font-bold px-20 flex justify-between'>
+    <div className='font-bold px-20 max-sm:px-3 text-lg flex justify-between'>
      <div> XERO<span className='text-orange-600'>TODO</span></div>
      {
       location.pathname==='/' ?
-      <div className='flex gap-6'>
-      <Link to="/login"><div className='font-medium bg-orange-600 py-1 px-2 rounded-2xl text-black cursor-pointer'>LOG IN</div></Link>
-      <Link to="/register"><div className='font-medium bg-orange-600 py-1 px-2 rounded-2xl text-black cursor-pointer'>SIGN UP</div></Link>
+      <div className='flex gap-6 max-sm:gap-3'>
+      <Link to="/login"><div className="bg-orange-600 text-white py-2 px-4 mt-4 max-sm:mt-2 rounded max-sm:text-sm max-sm:p-2 max-sm:font-semibold">LOG IN</div></Link>
+      <Link to="/register"><div className="bg-orange-600 text-white py-2 px-4 mt-4 max-sm:mt-2 rounded max-sm:text-sm max-sm:p-2 max-sm:font-semibold">SIGN UP</div></Link>
       </div>
       :
       location.pathname==='/home'?

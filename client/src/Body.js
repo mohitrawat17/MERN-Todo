@@ -13,7 +13,7 @@ const Body = () => {
   const [todoLength, setTodoLength] = useState(0);
   const [todoCompleted, setTodoCompleted] = useState(0);
   const[username,setUsername]=useState('')
-  console.log(allTasks);
+  // console.log(allTasks);
 
   const fetchData = async () => {
     try {
@@ -115,21 +115,22 @@ const Body = () => {
 
 
   return (
-    <div className="flex justify-center items-end flex-col my-10">
-    <div className="text-lg font-semibold mr-5">Welcome<span className="text-orange-600"> {username}</span></div>
-      <div className="rounded-3xl border flex justify-between mx-auto py-16 px-10 w-3/6  border-orange-200">
-        <div className="text-5xl">
+    <div className="flex justify-center items-start flex-col my-10 max-lg:my-7">
+    <div className="flex justify-end w-full">
+    <div className="text-lg font-semibold mr-5 mb-3">Welcome<span className="text-orange-600"> {username}</span></div>
+    </div>
+    <div className="rounded-3xl border flex max-sm:flex-col-reverse justify-between mx-auto  pl-10 max-lg:pl-7 max-md:pl-4 max-sm:pl-0 w-3/6 max-sm:w-5/6  border-orange-200">
+    <div className="max-sm:pl-2 text-5xl font-semibold max-lg:text-4xl max-md:text-3xl max-sm:w-full w-9/12 max-md:w-8/12 py-10 max-lg:py-7 max-md:py-4">
           Todo<br/><span className="text-4xl"> {handleText()}</span>
-          <br />
-          <div className="text-xl mt-4 tracking-wider">The more you note, the more you do.</div>
+          <div className="text-xl font-normal max-md:text-lg mt-4 max-md:mt-2 max-sm:tracking-normal max-sm:text-base tracking-wider">The more you note, the more you grow.</div>
         </div>
-        <div className="rounded-full w-20 flex justify-center items-center h-20 text-4xl  bg-orange-600 text-black  font-bold">
+        <div className="rounded-r-3xl max-sm:py-2 flex justify-center items-center w-3/12 max-sm:w-full max-sm:rounded-t-3xl max-sm:rounded-r-none max-md:w-4/12 text-7xl max-lg:text-5xl  bg-orange-700 text-black  font-bold">
           {todoCompleted}/{todoLength}
         </div>
       </div>
 
       {/* adding new task logic */}
-      <div className="flex my-10 mx-auto" onClick={() => setAddTodo(!addTodo)}>
+      <div className="flex my-10 max-md:my-7 mx-auto" onClick={() => setAddTodo(!addTodo)}>
         <div className="rounded-2xl outline-none px-3 py-2 border border-orange-200 cursor-pointer">
           Add new task <AddCircleIcon />
         </div>
@@ -138,14 +139,14 @@ const Body = () => {
       {addTodo ? (
         <div className="flex flex-col my-10 mx-auto items-end">
           <input
-            className="rounded-2xl outline-none px-3 py-2 w-96 my-4 bg-gray-800"
+            className="rounded-2xl outline-none px-3 py-2 w-96 max-md:w-80 max-md:my-3 max-md:px-2 my-4 bg-gray-800"
             type="text"
             value={newTitle}
             placeholder="Title"
             onChange={(e) => setNewTitle(e.target.value)}
           />
           <input
-            className="rounded-2xl outline-none px-3 py-2 w-96 my-4 bg-gray-800"
+            className="rounded-2xl outline-none px-3 py-2 w-96 max-md:w-80 max-md:my-3 max-md:px-2 my-4 bg-gray-800"
             type="text"
             value={newTask}
             placeholder="write your next task"
@@ -168,15 +169,16 @@ const Body = () => {
       )}
 
       {/* displaying todo's logic */}
-      <div className="mx-auto  px-3 w-7/12">
+      <div className="mx-auto  px-3 w-7/12 max-md:w-6/12 max-sm:w-full">
         {
           allTasks.map((data) => {
             return (
               <div key={data._id} className="flex flex-col border mb-4 border-orange-200 rounded-xl px-3 py-2">
                 <div className="flex justify-between">
                   <div className="flex ">
-                    <div className={`${data.taskCompleted ? 'bg-green-600' : 'bg-red-600'} rounded-full px-[14px] mr-2`}></div>
-                    <div className="text-xl font-semibold tracking-wider">{data.name}</div>
+                  <div className={`h-6 w-6 mt-1 flex items-center justify-center ${data.taskCompleted ? 'bg-green-600' : 'bg-red-600'} rounded-full mr-2`}></div>
+
+                    <div className="text-xl max-sm:text-lg font-semibold tracking-wider">{data.name}</div>
                   </div>
 
                   <div>
@@ -189,7 +191,7 @@ const Body = () => {
                     <DeleteIcon onClick={()=>deleteTodos(data._id)} className="cursor-pointer" />
                   </div>
                 </div>
-                <div className="mt-3 ml-3">{data.task}</div>
+                <div className="mt-3 ">{data.task}</div>
               </div>
             )
           })

@@ -51,52 +51,53 @@ const createUser=()=>{
 
 
   return (
-    <div className='flex justify-center items-center h-[550px]'>
-      <div className='flex flex-col items-center border p-5 border-orange-200 rounded-3xl w-5/12'>
-        <h1 className='text-xl'>Signup To Register</h1>
-
-        {/* name */}
+    <div className='flex justify-center items-center min-h-screen'>
+      <div className=' p-6 rounded-3xl border max-sm:border-black border-orange-200 shadow-lg w-full max-w-md'>
+        <h1 className='text-2xl font-semibold mb-4 text-center'>Signup To Register</h1>
         <input
           onChange={(e) => setName(e.target.value)}
-          className="rounded-2xl outline-none px-3 py-2 w-full my-4 bg-gray-800" type='text' placeholder='Enter name' />
-
-          {/* username */}
+          className='bg-gray-800 rounded-lg outline-none px-4 py-2 w-full my-4'
+          type='text'
+          placeholder='Enter name'
+        />
         <input
           onChange={(e) => setUsername(e.target.value)}
-          className="rounded-2xl outline-none px-3 py-2 w-full my-4 bg-gray-800" type='text' placeholder='Enter username' />
-
-          {/* password */}
+          className='bg-gray-800 rounded-lg outline-none px-4 py-2 w-full my-4'
+          type='text'
+          placeholder='Enter username'
+        />
         <input
           onChange={(e) => setPassword(e.target.value)}
-          className="rounded-2xl outline-none px-3 py-2 w-full my-4 bg-gray-800" type='password' placeholder='Enter password' />
-
-          {/* password confirmation */}
+          className='bg-gray-800 rounded-lg outline-none px-4 py-2 w-full my-4'
+          type='password'
+          placeholder='Enter password'
+        />
         <input
           onChange={(e) => setConfirmation(e.target.value)}
-          className="rounded-2xl outline-none px-3 py-2 w-full mt-4 mb-2 bg-gray-800" type='password' placeholder='Confirm password' />
-
-          {/* flag */}
-        
-          {
-            flag ?
-            <></>
-              :
-              
-              <p className='text-red-600 text-right mr-5 w-full'>
-              *Please fill all fields
-              </p>
-          }
-        
-
-        {/* submit */}
-        <button className='bg-orange-600 py-1 px-2 rounded-2xl text-gray-900 font-semibold'
-        onClick={handleSubmit}
+          className='bg-gray-800 rounded-lg outline-none px-4 py-2 w-full my-4'
+          type='password'
+          placeholder='Confirm password'
+        />
+        {!flag && (
+          <p className='text-red-600 text-sm text-right mb-2'>
+            *Please fill all fields
+          </p>
+        )}
+        <button
+          className='bg-orange-500 text-white py-2 px-6 bg-gray-800 rounded hover:bg-orange-700 w-full'
+          onClick={handleSubmit}
         >
-          Submit</button>
-
+          Submit
+        </button>
+        <div className='mt-4 text-center'>
+          Already a user?{' '}
+          <Link to='/login' className='text-purple-800'>
+            Click here to log in
+          </Link>
+        </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default Register
