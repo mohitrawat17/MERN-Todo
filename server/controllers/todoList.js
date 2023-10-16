@@ -6,8 +6,8 @@ module.exports = {
     
     try {
       const token =  req.headers['x-access-token']
-      const decoded=jwt.verify(token,'secretmohitxrwt123')
-
+      const decoded=jwt.verify(token,process.env.SECRET_KEY)
+           console.log(process.env.SECRET_KEY);
       const data = await todo.find({user:decoded._id}, { __v: 0});
       
       res.json({data,username:decoded.username});
@@ -22,7 +22,7 @@ module.exports = {
   setTodos: async (req, res) => {
     try {
       const token = req.headers['x-access-token'];
-      const decoded = jwt.verify(token, 'secretmohitxrwt123'); // Use environment variable for secret key
+      const decoded = jwt.verify(token, process.env.SECRET_KEY); // Use environment variable for secret key
       const p1 = new todo({
         name: req.body.name,
         task: req.body.task,
